@@ -8,6 +8,7 @@ from confluent_kafka.schema_registry.avro import AvroSerializer
 
 from commons import Config
 
+# Fetch schema from registry
 registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL})
 latest_version = registry_client.get_latest_version(Config.TOPIC_NAME)
 
@@ -20,7 +21,7 @@ value_avro_serializer = AvroSerializer(
     },
 )
 
-# Kafka Producer
+# Initialize Kafka producer
 producer = SerializingProducer(
     {
         "bootstrap.servers": Config.BOOTSTRAP_SERVERS,
@@ -44,6 +45,17 @@ def delivery_report(err, msg):
         print("Message delivered to {} [{}]".format(msg.topic(), msg.partition()))
 
 
+# Function to trigger any available delivery report callbacks from previous produce() calls
+def cleanup(producer):
+    print("---------------------------------------")
+
+    events_processed = producer.poll(1)
+    print(f"Events_processed: {events_processed}")
+
+    messages_in_queue = producer.flush(1)
+    print(f"Messages_in_queue: {messages_in_queue}")
+
+
 while True:
     try:
         data = {
@@ -53,14 +65,11 @@ while True:
             "currency": fake.currency_code(),
             "counterpart_id": fake.random_int(min=1, max=1000),
         }
+
         producer.produce(Config.TOPIC_NAME, value=data, on_delivery=delivery_report)
 
         # Trigger any available delivery report callbacks from previous produce() calls
-        events_processed = producer.poll(1)
-        print(f"events_processed: {events_processed}")
-
-        messages_in_queue = producer.flush(1)
-        print(f"messages_in_queue: {messages_in_queue}")
+        cleanup(producer)
 
         time.sleep(0.5)
     except KeyboardInterrupt:
@@ -69,8 +78,4 @@ while True:
         print(e)
         raise
     finally:
-        events_processed = producer.poll(1)
-        print(f"events_processed: {events_processed}")
-
-        messages_in_queue = producer.flush(1)
-        print(f"messages_in_queue: {messages_in_queue}")
+        cleanup(producer)
