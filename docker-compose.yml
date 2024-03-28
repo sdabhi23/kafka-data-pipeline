@@ -1,8 +1,27 @@
 version: "3.7"
-name: kafka-cluster
+name: infra-cluster
+
 volumes:
   redpanda-0: null
+
 services:
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2024-03-26T22-10-45Z
+    entrypoint: sh
+    command: -c 'mkdir -p /data/backup && mkdir -p /data/ml-features && /usr/bin/minio server /data --console-address ":9001"'
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   redpanda-0:
     image: docker.redpanda.com/redpandadata/redpanda:v23.3.9
     container_name: redpanda-0
@@ -35,6 +54,7 @@ services:
       # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
       - --smp 1
       - --default-log-level=info
+
   console:
     container_name: redpanda-console
     image: docker.redpanda.com/redpandadata/console:v2.4.5
