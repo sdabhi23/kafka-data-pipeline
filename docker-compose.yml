@@ -6,8 +6,9 @@ volumes:
 
 services:
 
-  minio:
+  minio-0:
     image: quay.io/minio/minio:RELEASE.2024-03-26T22-10-45Z
+    container_name: minio-0
     entrypoint: sh
     command: -c 'mkdir -p /data/backup && mkdir -p /data/ml-features && /usr/bin/minio server /data --console-address ":9001"'
     ports:
