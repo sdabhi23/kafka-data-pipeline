@@ -7,6 +7,7 @@ name = "pypi"
 confluent-kafka = "*"
 minio = "*"
 faker = "*"
+fastavro = "*"
 
 [dev-packages]
 
