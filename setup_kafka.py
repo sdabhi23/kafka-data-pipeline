@@ -2,9 +2,7 @@ from confluent_kafka.schema_registry import SchemaRegistryClient, Schema
 from confluent_kafka.admin import AdminClient, NewTopic
 
 
-admin_client = AdminClient(
-    {"bootstrap.servers": "localhost:19092", "client.id": "setup_kafka"}
-)
+admin_client = AdminClient({"bootstrap.servers": "localhost:19092", "client.id": "setup_kafka"})
 topic_name = "transactions"
 transactions_topic = NewTopic(
     topic=topic_name,
@@ -13,9 +11,7 @@ transactions_topic = NewTopic(
     config={"retention.ms": 24 * 60 * 60 * 1000, "segment.ms": 24 * 60 * 60 * 1000},
 )
 
-created_topics = admin_client.create_topics(
-    new_topics=[transactions_topic], validate_only=False
-)
+created_topics = admin_client.create_topics(new_topics=[transactions_topic], validate_only=False)
 
 for topic, future in created_topics.items():
     try:
@@ -25,8 +21,8 @@ for topic, future in created_topics.items():
         print(f"Failed to create topic '{topic_name}': {e}")
 
 
-# Avro schema for your message
-record_schema = Schema("""
+record_schema = Schema(
+    """
 {
   "type": "record",
   "name": "TransactionRecord",
@@ -38,8 +34,9 @@ record_schema = Schema("""
     {"name": "counterpart_id", "type": "int"}
   ]
 }
-
-""", "AVRO")
+""",
+    "AVRO",
+)
 
 schema_registry_client = SchemaRegistryClient({"url": "http://localhost:18081"})
 
