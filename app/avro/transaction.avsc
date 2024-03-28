@@ -1,0 +1,26 @@
+{
+    "name": "Transaction",
+    "type": "record",
+    "fields": [
+        {
+            "name": "user_id",
+            "type": "int"
+        },
+        {
+            "name": "transaction_timestamp_millis",
+            "type": "long"
+        },
+        {
+            "name": "amount",
+            "type": "float"
+        },
+        {
+            "name": "currency",
+            "type": "string"
+        },
+        {
+            "name": "counterpart_id",
+            "type": "int"
+        }
+    ]
+}
