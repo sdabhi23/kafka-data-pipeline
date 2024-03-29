@@ -8,7 +8,7 @@ confluent-kafka = "*"
 minio = "*"
 faker = "*"
 fastavro = "*"
-faust = "*"
+requests = "*"
 
 [dev-packages]
 
