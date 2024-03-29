@@ -26,9 +26,9 @@ created_topics = admin_client.create_topics(new_topics=[transactions_topic, ml_f
 for topic, future in created_topics.items():
     try:
         future.result()
-        print(f"Topic '{Config.TOPIC_NAME_TRANSACTIONS}' created successfully with 1 day data retention.")
+        print(f"Topic '{topic}' created successfully with 1 day data retention.")
     except Exception as e:
-        print(f"Failed to create topic '{Config.TOPIC_NAME_TRANSACTIONS}': {e}")
+        print(f"Failed to create topic '{topic}': {e}")
 
 print("Setting up schemas in schema registry...")
 

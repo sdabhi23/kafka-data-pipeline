@@ -1,7 +1,7 @@
 import time
 import random
 from faker import Faker
-from confluent_kafka import Producer, SerializingProducer
+from confluent_kafka import SerializingProducer
 from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.avro import AvroSerializer
 
@@ -12,7 +12,7 @@ from commons import Config
 registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL})
 latest_version = registry_client.get_latest_version(Config.TOPIC_NAME_TRANSACTIONS)
 
-value_avro_serializer = AvroSerializer(
+transaction_avro_serializer = AvroSerializer(
     schema_registry_client=registry_client,
     schema_str=latest_version.schema.schema_str,
     conf={
@@ -26,7 +26,7 @@ producer = SerializingProducer(
     {
         "bootstrap.servers": Config.BOOTSTRAP_SERVERS,
         "security.protocol": "plaintext",
-        "value.serializer": value_avro_serializer,
+        "value.serializer": transaction_avro_serializer,
         "delivery.timeout.ms": 120000,
         "enable.idempotence": "true",
         "client.id": "transactions-producer",
