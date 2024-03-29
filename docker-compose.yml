@@ -7,29 +7,31 @@ volumes:
 services:
 
   flink-jobmanager:
-    image: flink:1.19
+    image: flink:1.19-java11
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
       - 8081:8081
     command: jobmanager
+    env_file: flink.env
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
 
   flink-taskmanager:
-    image: flink:1.19
+    image: flink:1.19-java11
     hostname: flink-taskmanager
     container_name: flink-taskmanager
     scale: 1
     depends_on:
       - flink-jobmanager
     command: taskmanager
+    env_file: flink.env
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
 
   minio-0:
