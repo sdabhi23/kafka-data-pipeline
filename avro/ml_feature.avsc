@@ -1,0 +1,14 @@
+{
+    "name": "ML Feature",
+    "type": "record",
+    "fields": [
+        {
+            "name": "user_id",
+            "type": "int"
+        },
+        {
+            "name": "total_transactions_count",
+            "type": "int"
+        }
+    ]
+}
