@@ -1,5 +1,5 @@
 {
-    "name": "ML Feature",
+    "name": "MLFeature",
     "type": "record",
     "fields": [
         {
