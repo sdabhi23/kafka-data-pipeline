@@ -7,7 +7,7 @@ volumes:
 services:
 
   flink-jobmanager:
-    image: flink:1.19-scala_2.12-java8
+    image: flink:1.19
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
@@ -19,11 +19,12 @@ services:
         jobmanager.rpc.address: jobmanager
 
   flink-taskmanager:
-    image: flink:1.19-scala_2.12-java8
+    image: flink:1.19
     hostname: flink-taskmanager
     container_name: flink-taskmanager
+    scale: 1
     depends_on:
-      - jobmanager
+      - flink-jobmanager
     command: taskmanager
     environment:
       - |
