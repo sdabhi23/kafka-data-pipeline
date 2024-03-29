@@ -14,10 +14,6 @@ services:
       - 8081:8081
     command: jobmanager
     env_file: flink.env
-    environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: flink-jobmanager
 
   flink-taskmanager:
     image: flink:1.19-java11
@@ -28,11 +24,6 @@ services:
       - flink-jobmanager
     command: taskmanager
     env_file: flink.env
-    environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: flink-jobmanager
-        taskmanager.numberOfTaskSlots: 2
 
   minio-0:
     image: quay.io/minio/minio:RELEASE.2024-03-26T22-10-45Z
