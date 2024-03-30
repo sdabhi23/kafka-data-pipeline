@@ -9,6 +9,7 @@ minio = "*"
 faker = "*"
 fastavro = "*"
 requests = "*"
+apache-flink = "1.17.2"
 
 [dev-packages]
 

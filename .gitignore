@@ -1,3 +1,6 @@
+flink-1.17.2/
+flink-1.17.2*.tgz
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

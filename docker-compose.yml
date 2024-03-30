@@ -7,16 +7,23 @@ volumes:
 services:
 
   flink-jobmanager:
-    image: flink:1.19-java11
+    build:
+      context: flink
+      tags:
+        - pyflink:1.17.2
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
       - 8081:8081
+    depends_on:
+      - minio-0
     command: jobmanager
     env_file: flink.env
+    volumes:
+      - ./app:/app
 
   flink-taskmanager:
-    image: flink:1.19-java11
+    image: pyflink:1.17.2
     hostname: flink-taskmanager
     container_name: flink-taskmanager
     scale: 1
@@ -24,6 +31,8 @@ services:
       - flink-jobmanager
     command: taskmanager
     env_file: flink.env
+    volumes:
+      - ./app:/app
 
   minio-0:
     image: quay.io/minio/minio:RELEASE.2024-03-26T22-10-45Z
