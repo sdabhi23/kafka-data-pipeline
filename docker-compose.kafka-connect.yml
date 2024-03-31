@@ -14,6 +14,22 @@ services:
     volumes:
       - ./connect-configs:/app
 
+  transactions-ml-features-historical-job:
+    image: redpanda-kafka-connectors:v1.0.21
+    hostname: transactions-ml-features-historical-job
+    container_name: transactions-ml-features-historical-job
+    command: /opt/kafka/bin/connect-standalone.sh /app/connect.properties /app/transactions-ml-features-historical-sink.properties
+    volumes:
+      - ./connect-configs:/app
+
+  transactions-ml-features-live-job:
+    image: redpanda-kafka-connectors:v1.0.21
+    hostname: transactions-ml-features-live-job
+    container_name: transactions-ml-features-live-job
+    command: /opt/kafka/bin/connect-standalone.sh /app/connect.properties /app/transactions-ml-features-live-sink.properties
+    volumes:
+      - ./connect-configs:/app
+
 networks:
   default:
     name: infra-cluster_default

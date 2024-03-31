@@ -1,0 +1,49 @@
+version: "3.7"
+name: flink-cluster
+
+volumes:
+  redpanda-0: null
+
+services:
+
+  flink-jobmanager:
+    build:
+      context: flink
+      tags:
+        - pyflink:1.17.2
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    ports:
+      - 8081:8081
+    command: jobmanager
+    env_file: flink.env
+    volumes:
+      - ./app:/app
+
+  flink-taskmanager:
+    image: pyflink:1.17.2
+    hostname: flink-taskmanager
+    scale: 1
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    env_file: flink.env
+    volumes:
+      - ./app:/app
+
+  flink-historical-transform-runner:
+    image: pyflink:1.17.2
+    hostname: flink-historical-transform-runner
+    container_name: flink-historical-transform-runner
+    depends_on:
+      - flink-jobmanager
+      - flink-taskmanager
+    command: flink run --jobmanager flink-jobmanager:8081 --python /app/transactions_ml_features_historical_job.py
+    env_file: flink.env
+    volumes:
+      - ./app:/app
+
+networks:
+  default:
+    name: infra-cluster_default
+    external: true

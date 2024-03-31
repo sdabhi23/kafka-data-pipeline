@@ -6,34 +6,6 @@ volumes:
 
 services:
 
-  flink-jobmanager:
-    build:
-      context: flink
-      tags:
-        - pyflink:1.17.2
-    hostname: flink-jobmanager
-    container_name: flink-jobmanager
-    ports:
-      - 8081:8081
-    depends_on:
-      - minio-0
-    command: jobmanager
-    env_file: flink.env
-    volumes:
-      - ./app:/app
-
-  flink-taskmanager:
-    image: pyflink:1.17.2
-    hostname: flink-taskmanager
-    container_name: flink-taskmanager
-    scale: 1
-    depends_on:
-      - flink-jobmanager
-    command: taskmanager
-    env_file: flink.env
-    volumes:
-      - ./app:/app
-
   minio-0:
     image: quay.io/minio/minio:RELEASE.2024-03-26T22-10-45Z
     container_name: minio-0
@@ -114,5 +86,16 @@ services:
         connect:
           enabled: true
           clusters:
-            - name: s3-backup-connect-cluster
-              url: http://transactions-backup-connect:8083
+            - name: transactions-backup-job
+              url: http://transactions-backup-job:8083
+            - name: transactions-ml-features-historical-job
+              url: http://transactions-ml-features-historical-job:8083
+            - name: transactions-ml-features-live-job
+              url: http://transactions-ml-features-live-job:8083
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis/redis-stack:7.2.0-v9
+    ports:
+      - 8001:8001
