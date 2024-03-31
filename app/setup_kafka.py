@@ -36,24 +36,24 @@ schema_registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL
 
 print("Processing schema for transactions")
 
-with open(f"avro/transaction.avsc") as f:
-    ml_feature_schema_str = f.read()
-ml_feature_schema = Schema(ml_feature_schema_str, "AVRO")
+with open(f"app/avro/transaction.avsc") as f:
+    transaction_schema_str = f.read()
+transaction_schema = Schema(transaction_schema_str, "AVRO")
 
 try:
-    schema_id = schema_registry_client.register_schema(Config.TOPIC_NAME_TRANSACTIONS, ml_feature_schema)
+    schema_id = schema_registry_client.register_schema(f"{Config.TOPIC_NAME_TRANSACTIONS}-value", transaction_schema)
     print(f"Schema registered successfully with schema id: {schema_id}")
 except Exception as e:
     print(f"Schema registration failed with error: {e}")
 
 print("Processing schema for ML features")
 
-with open(f"avro/ml_feature.avsc") as f:
+with open(f"app/avro/ml_feature.avsc") as f:
     ml_feature_schema_str = f.read()
 ml_feature_schema = Schema(ml_feature_schema_str, "AVRO")
 
 try:
-    schema_id = schema_registry_client.register_schema(Config.TOPIC_NAME_ML_FEATURES, ml_feature_schema)
+    schema_id = schema_registry_client.register_schema(f"{Config.TOPIC_NAME_ML_FEATURES}-value", ml_feature_schema)
     print(f"Schema registered successfully with schema id: {schema_id}")
 except Exception as e:
     print(f"Schema registration failed with error: {e}")
