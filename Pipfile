@@ -13,5 +13,10 @@ apache-flink = "1.17.2"
 
 [dev-packages]
 
-[requires]
-python_version = "3.10"
+[scripts]
+build-docker = "docker compose -f docker-compose.yml -f docker-compose.flink.yml -f docker-compose.kafka-connect.yml build"
+start-services = "docker compose -f docker-compose.yml up -d"
+configure-kafka = "python app/setup_kafka.py"
+producer = "python app/producer.py"
+start-flink = "docker compose -f docker-compose.flink.yml up -d"
+start-kafka-connect = "docker compose -f docker-compose.kafka-connect.yml up -d"
