@@ -3,3 +3,6 @@ class Config:
     SCHEMA_REGISTRY_URL = "http://localhost:18081"
     TOPIC_NAME_TRANSACTIONS = "transactions"
     TOPIC_NAME_ML_FEATURES = "ml_features"
+
+    SCHEMA_SUBJECT_TRANSACTIONS = f"{TOPIC_NAME_TRANSACTIONS}-value"
+    SCHEMA_SUBJECT_ML_FEATURES = f"{TOPIC_NAME_ML_FEATURES}-value"

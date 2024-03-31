@@ -30,7 +30,7 @@ def kafka_read():
             'scan.startup.mode' = 'earliest-offset',
             'value.format' = 'avro-confluent',
             'value.avro-confluent.url' = 'http://redpanda-0:18081',
-            'value.avro-confluent.subject' = '{Config.TOPIC_NAME_TRANSACTIONS}'
+            'value.avro-confluent.subject' = '{Config.SCHEMA_SUBJECT_TRANSACTIONS}'
         );
     """
 

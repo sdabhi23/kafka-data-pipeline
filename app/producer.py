@@ -10,7 +10,7 @@ from commons import Config
 
 # Fetch schema from registry
 registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL})
-latest_version = registry_client.get_latest_version(f"{Config.TOPIC_NAME_TRANSACTIONS}-value")
+latest_version = registry_client.get_latest_version(Config.SCHEMA_SUBJECT_TRANSACTIONS)
 
 transaction_avro_serializer = AvroSerializer(
     schema_registry_client=registry_client,
