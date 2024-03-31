@@ -5,7 +5,7 @@ from commons import Config
 
 
 env = StreamExecutionEnvironment.get_execution_environment()
-env.set_parallelism(4)
+env.set_parallelism(2)
 
 tenv = StreamTableEnvironment.create(env)
 
