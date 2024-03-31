@@ -1,5 +1,5 @@
 {
-    "name": "MLFeature",
+    "name": "MLFeatureHistorical",
     "type": "record",
     "fields": [
         {
