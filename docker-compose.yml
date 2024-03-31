@@ -83,6 +83,12 @@ services:
       # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
       - --smp 1
       - --default-log-level=info
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
 
   console:
     container_name: redpanda-console
@@ -105,3 +111,8 @@ services:
           adminApi:
             enabled: true
             urls: ["http://redpanda-0:9644"]
+        connect:
+          enabled: true
+          clusters:
+            - name: s3-backup-connect-cluster
+              url: http://transactions-backup-connect:8083

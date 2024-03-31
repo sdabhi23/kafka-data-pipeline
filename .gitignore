@@ -1,6 +1,9 @@
 flink-1.17.2/
 flink-1.17.2*.tgz
 
+*.zip
+confluentinc-*/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
