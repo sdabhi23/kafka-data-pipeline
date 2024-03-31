@@ -9,7 +9,7 @@ from confluent_kafka.schema_registry.avro import AvroSerializer
 from commons import Config
 
 # Fetch schema from registry
-registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL})
+registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL_LOCAL})
 latest_version = registry_client.get_latest_version(Config.SCHEMA_SUBJECT_TRANSACTIONS)
 
 transaction_avro_serializer = AvroSerializer(
@@ -23,7 +23,7 @@ transaction_avro_serializer = AvroSerializer(
 # Initialize Kafka producer
 producer = SerializingProducer(
     {
-        "bootstrap.servers": Config.BOOTSTRAP_SERVERS,
+        "bootstrap.servers": Config.BOOTSTRAP_SERVERS_LOCAL,
         "security.protocol": "plaintext",
         "value.serializer": transaction_avro_serializer,
         "delivery.timeout.ms": 120000,
