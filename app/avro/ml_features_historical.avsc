@@ -1,10 +1,15 @@
 {
-    "name": "MLFeatureHistorical",
     "type": "record",
+    "name": "record",
+    "namespace": "org.apache.flink.avro.generated",
     "fields": [
         {
             "name": "user_id",
             "type": "int"
+        },
+        {
+            "name": "transaction_timestamp_millis",
+            "type": "long"
         },
         {
             "name": "total_transactions_count",

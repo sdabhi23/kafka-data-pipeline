@@ -1,6 +1,7 @@
 {
-    "name": "MLFeaturesLive",
     "type": "record",
+    "name": "record",
+    "namespace": "org.apache.flink.avro.generated",
     "fields": [
         {
             "name": "user_id",
