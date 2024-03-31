@@ -60,6 +60,12 @@ pipenv run start-kafka-connect
 pipenv run producer
 ```
 
+For stopping all the services gracefully and cleaning up the volumes and networks run the following command
+
+```bash
+pipenv run shutdown-all-services
+```
+
 ## Test the data stored on S3
 
 Download the DuckDB binary from <https://duckdb.org/docs/installation/> (pick `Command line` environment) and run the cli. You can then feed the following SQL statements to query the data stored as parquet files in S3.

@@ -4,6 +4,8 @@ flink-1.17.2*.tgz
 *.zip
 confluentinc-*/
 
+duckdb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
