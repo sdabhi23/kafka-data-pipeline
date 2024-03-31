@@ -5,7 +5,7 @@ from commons import Config, TOPICS_TO_SETUP, SCHEMA_TO_SETUP
 
 print("Setting up Kafka topics...")
 
-admin_client = AdminClient({"bootstrap.servers": Config.BOOTSTRAP_SERVERS, "client.id": "setup-kafka"})
+admin_client = AdminClient({"bootstrap.servers": Config.BOOTSTRAP_SERVERS_LOCAL, "client.id": "setup-kafka"})
 
 topics = []
 
@@ -30,7 +30,7 @@ for topic, future in created_topics.items():
 
 print("Setting up schemas in schema registry...")
 
-schema_registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL})
+schema_registry_client = SchemaRegistryClient({"url": Config.SCHEMA_REGISTRY_URL_LOCAL})
 
 for schema_subject in SCHEMA_TO_SETUP:
     topic_name = schema_subject.replace('-value', '')
@@ -38,6 +38,7 @@ for schema_subject in SCHEMA_TO_SETUP:
 
     with open(f"app/avro/{topic_name}.avsc") as f:
         schema_str = f.read()
+
     schema = Schema(schema_str, "AVRO")
 
     try:

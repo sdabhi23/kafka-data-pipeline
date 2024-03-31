@@ -1,7 +1,9 @@
 class Config:
-    BOOTSTRAP_SERVERS = "localhost:19092"
-    SCHEMA_REGISTRY_URL = "http://localhost:18081"
+    BOOTSTRAP_SERVERS_LOCAL = "localhost:19092"
+    SCHEMA_REGISTRY_URL_LOCAL = "http://localhost:18081"
 
+    BOOTSTRAP_SERVERS_DOCKER = "redpanda-0:9092"
+    SCHEMA_REGISTRY_URL_DOCKER = "http://redpanda-0:18081"
 
     TOPIC_NAME_TRANSACTIONS = "transactions"
     TOPIC_NAME_ML_FEATURES_HISTORICAL = "ml_features_historical"
