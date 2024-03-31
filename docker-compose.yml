@@ -6,6 +6,34 @@ volumes:
 
 services:
 
+  flink-jobmanager:
+    build:
+      context: flink
+      tags:
+        - pyflink:1.17.2
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    ports:
+      - 8081:8081
+    depends_on:
+      - minio-0
+    command: jobmanager
+    env_file: flink.env
+    volumes:
+      - ./app:/app
+
+  flink-taskmanager:
+    image: pyflink:1.17.2
+    hostname: flink-taskmanager
+    container_name: flink-taskmanager
+    scale: 1
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    env_file: flink.env
+    volumes:
+      - ./app:/app
+
   minio-0:
     image: quay.io/minio/minio:RELEASE.2024-03-26T22-10-45Z
     container_name: minio-0
@@ -55,6 +83,12 @@ services:
       # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
       - --smp 1
       - --default-log-level=info
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
 
   console:
     container_name: redpanda-console
@@ -77,3 +111,8 @@ services:
           adminApi:
             enabled: true
             urls: ["http://redpanda-0:9644"]
+        connect:
+          enabled: true
+          clusters:
+            - name: s3-backup-connect-cluster
+              url: http://transactions-backup-connect:8083

@@ -1,0 +1,20 @@
+version: "3.7"
+name: connect-cluster
+
+services:
+
+  transactions-backup-job:
+    build:
+      context: kafka-connect
+      tags:
+        - redpanda-kafka-connectors:v1.0.21
+    hostname: transactions-backup-job
+    container_name: transactions-backup-job
+    command: /opt/kafka/bin/connect-standalone.sh /app/connect.properties /app/transactions-backup-sink.properties
+    volumes:
+      - ./connect-configs:/app
+
+networks:
+  default:
+    name: infra-cluster_default
+    external: true
