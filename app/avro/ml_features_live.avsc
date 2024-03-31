@@ -5,11 +5,11 @@
     "fields": [
         {
             "name": "user_id",
-            "type": "int"
+            "type": "string"
         },
         {
             "name": "total_transactions_count",
-            "type": "int"
+            "type": "string"
         }
     ]
 }
