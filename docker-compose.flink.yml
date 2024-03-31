@@ -43,6 +43,18 @@ services:
     volumes:
       - ./app:/app
 
+  flink-live-transform-runner:
+    image: pyflink:1.17.2
+    hostname: flink-live-transform-runner
+    container_name: flink-live-transform-runner
+    depends_on:
+      - flink-jobmanager
+      - flink-taskmanager
+    command: flink run --jobmanager flink-jobmanager:8081 --python /app/transactions_ml_features_live_job.py
+    env_file: flink.env
+    volumes:
+      - ./app:/app
+
 networks:
   default:
     name: infra-cluster_default
