@@ -46,12 +46,12 @@ pipenv run start-kafka-connect
 > [!TIP]
 > Web consoles are available for all the services we have setup. You can use them to view task progess / data for any service / job.
 >
-> | Service    | URL                    | Remarks                                                                                 |
-> |------------|------------------------|-----------------------------------------------------------------------------------------|
-> | Kafka      | http://localhost:8080/ | The connector section will keep on breaking till you bring up the Kafka Connect cluster |
-> | Redis      | http://localhost:8001/ | N/A                                                                                     |
-> | Flink      | http://localhost:8081/ | N/A                                                                                     |
-> | Minio (S3) | http://localhost:9001/ | Use `minioadmin` as both username & password                                            |
+> | Service    | URL                      | Remarks                                                                                 |
+> |------------|--------------------------|-----------------------------------------------------------------------------------------|
+> | Kafka      | <http://localhost:8080/> | The connector section will keep on breaking till you bring up the Kafka Connect cluster |
+> | Redis      | <http://localhost:8001/> | N/A                                                                                     |
+> | Flink      | <http://localhost:8081/> | N/A                                                                                     |
+> | Minio (S3) | <http://localhost:9001/> | Use `minioadmin` as both username & password                                            |
 >
 
 :drum: Now time to start our producer and see if the data flows properly!
