@@ -6,8 +6,8 @@ class Config:
     SCHEMA_REGISTRY_URL_DOCKER = "http://redpanda-0:18081"
 
     TOPIC_NAME_TRANSACTIONS = "transactions"
-    TOPIC_NAME_ML_FEATURES_HISTORICAL = "ml_features_historical"
-    TOPIC_NAME_ML_FEATURES_LIVE = "ml_features_live"
+    TOPIC_NAME_ML_FEATURES_HISTORICAL = "ml-features-historical"
+    TOPIC_NAME_ML_FEATURES_LIVE = "ml-features-live"
 
     SCHEMA_SUBJECT_TRANSACTIONS = f"{TOPIC_NAME_TRANSACTIONS}-value"
     SCHEMA_SUBJECT_ML_FEATURES_HISTORICAL = f"{TOPIC_NAME_ML_FEATURES_HISTORICAL}-value"

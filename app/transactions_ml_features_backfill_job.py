@@ -46,7 +46,7 @@ backfill_df: DataFrame = spark.sql(
                         SLICE(SPLIT(input_file_name, '/'), -1, 1)
                     ), 'backfill.parquet'
                 ), '/'
-            ), 'transactions', 'ml-features'
+            ), 'transactions', 'ml-features-historical'
         ) as output_file_name
     FROM transactions
 """
