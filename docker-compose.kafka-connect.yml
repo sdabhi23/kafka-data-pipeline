@@ -5,7 +5,7 @@ services:
 
   transactions-backup-job:
     build:
-      context: kafka-connect
+      context: docker/kafka-connect
       tags:
         - redpanda-kafka-connectors:v1.0.21
     hostname: transactions-backup-job

@@ -8,7 +8,7 @@ services:
 
   flink-jobmanager:
     build:
-      context: flink
+      context: docker/flink
       tags:
         - pyflink:1.17.2
     hostname: flink-jobmanager
