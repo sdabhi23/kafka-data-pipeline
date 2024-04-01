@@ -4,7 +4,7 @@ This streaming data pipeline uses Kafka as the backbone and Flink for data proce
 
 This setup has been created and tested using Python 3.10 on Ubuntu 22.04 (running in WSL on a windows machine).
 
-## Caveats
+## Choices & Caveats
 
 * Right now, the backfill job is a Spark batch job which is not idempotent. This could have been a streaming job, where in a service reads events from transactions backups and emits them to the `ml-features-historical` topic in Kafka.
 * There are 2 ways to make the backfill idempotent, read the existing data in Spark and perform a dedupe **OR** use a Flink streaming job to make sure duplicates are not written to S3.
