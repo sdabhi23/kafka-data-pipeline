@@ -1,8 +1,18 @@
 # Kafka Data Pipeline
 
-This streaming data pipeline uses Kafka as the backbone and Flink for data processing and transformations. Kafka Connect is used for writing the streams to S3 compatiable blob stores and Redis (low latency KV store for realtime ML inference).
+This streaming data pipeline uses Kafka as the backbone and Flink for data processing and transformations. Kafka Connect is used for writing the streams to S3 compatiable blob stores and Redis (low latency KV store for realtime ML inference). Spark is used for the batch job to backfill the ml feature data.
 
 This setup has been created and tested using Python 3.10 on Ubuntu 22.04 (running in WSL on a windows machine).
+
+## Caveats
+
+* Right now, the backfill job is a Spark batch job which is not idempotent. This could have been a streaming job, where in a service reads events from transactions backups and emits them to the `ml-features-historical` topic in Kafka.
+* There are 2 ways to make the backfill idempotent, read the existing data in Spark and perform a dedupe **OR** use a Flink streaming job to make sure duplicates are not written to S3.
+* ML features Avro schema have a workaround for schema compatibility when writing to Kafka from Flink. [[StackOverflow Question](https://docs.confluent.io/cloud/current/flink/reference/serialization.html#avro-types-to-flink-sql-types)] [[Confluent Docs](https://stackoverflow.com/questions/76524654/flink-sql-automatically-uploads-avro-schema)]
+* I have used a separate queue and schema for writing computed ML Features to Redis because the Redis Kafka connector does not support Avro deserialization and field extraction. So the other 2 alternatives were to either build a custom connector or to write raw bytes to Redis and let the downstream application take care of deserialization. ML inference pipelines are already quite heavy and complex at times, so I felt it is simpler to have the data directly available as a string in Redis.
+* The entire codebase is in Python because all the tools used offer robust and feature complete Python APIs. While there is some performance overhead when using Python over Scala / Java, the ease of use was the final deciding factor. [^1]
+
+[^1]: [Flink's Scala APIs are deprecated and awill be removed in the next major version](https://cwiki.apache.org/confluence/display/FLINK/FLIP-265+Deprecate+and+remove+Scala+API+support)
 
 ## Steps for setup
 
@@ -60,6 +70,12 @@ pipenv run start-kafka-connect
 pipenv run producer
 ```
 
+Now, for the backfill job, use the following command for bringing up a tiny Spark cluster and running the backfill job on it.
+
+```bash
+pipenv run ml-features-backfill
+```
+
 For stopping all the services gracefully and cleaning up the volumes and networks run the following command
 
 ```bash
@@ -89,7 +105,3 @@ FROM transactions
 GROUP BY user_id, transaction_timestamp_millis
 HAVING count(*) > 1;
 ```
-
-## Notes
-
-* ML features Avro schema have a workaround for schema compatibility when writing to Kafka from Flink. [[StackOverflow Question](https://docs.confluent.io/cloud/current/flink/reference/serialization.html#avro-types-to-flink-sql-types)] [[Confluent Docs](https://stackoverflow.com/questions/76524654/flink-sql-automatically-uploads-avro-schema)]
