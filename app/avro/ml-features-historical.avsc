@@ -13,7 +13,7 @@
         },
         {
             "name": "total_transactions_count",
-            "type": "int"
+            "type": "long"
         }
     ]
 }

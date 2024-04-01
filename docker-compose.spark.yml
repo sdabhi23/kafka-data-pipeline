@@ -1,0 +1,34 @@
+version: "3.7"
+name: spark-cluster
+
+services:
+
+  spark-master-worker:
+    container_name: spark-master-worker
+    hostname: spark-master-worker
+    build:
+      context: docker/spark
+      tags:
+        - pyspark:v3.4.0
+    ports:
+      - 8082:8082
+      - 8083:8083
+    env_file: spark.env
+    volumes:
+      - ./app:/app
+
+  transactions-ml-features-backfill-job:
+    image: pyspark:v3.4.0
+    ports:
+      - 4040:4040
+    command: /opt/spark/bin/spark-submit --master spark://spark-master-worker:7077 /app/transactions_ml_features_backfill_job.py
+    depends_on:
+      - spark-master-worker
+    volumes:
+      - ./app:/app
+
+
+networks:
+  default:
+    name: infra-cluster_default
+    external: true

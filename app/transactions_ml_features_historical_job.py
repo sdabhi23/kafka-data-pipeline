@@ -39,7 +39,7 @@ create_historical_kafka_table = f"""
     create table ml_features_historical (
         user_id INT NOT NULL,
         transaction_timestamp_millis BIGINT NOT NULL,
-        total_transactions_count INT NOT NULL
+        total_transactions_count BIGINT NOT NULL
     ) with (
         'connector' = 'kafka',
         'topic' = '{Config.TOPIC_NAME_ML_FEATURES_HISTORICAL}',
@@ -60,13 +60,10 @@ agg_query_historical = """
     SELECT
         user_id,
         transaction_timestamp_millis,
-        CAST(
-            COUNT(user_id) OVER (
-                PARTITION BY user_id
-                ORDER BY transaction_ts
-                RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-            )
-            AS INT
+        COUNT(user_id) OVER (
+            PARTITION BY user_id
+            ORDER BY transaction_ts
+            RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
         )
     FROM kafka_transactions;
 """
