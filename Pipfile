@@ -10,11 +10,12 @@ faker = "*"
 fastavro = "*"
 requests = "*"
 apache-flink = "1.17.2"
+pyspark = "==3.4.0"
 
 [dev-packages]
 
 [scripts]
-build-docker = "docker compose -f docker-compose.yml -f docker-compose.flink.yml -f docker-compose.kafka-connect.yml build"
+build-docker = "docker compose -f docker-compose.yml -f docker-compose.flink.yml -f docker-compose.kafka-connect.yml -f docker-compose.spark.yml build"
 start-services = "docker compose -f docker-compose.yml up -d"
 configure-kafka = "python app/setup_kafka.py"
 producer = "python app/producer.py"

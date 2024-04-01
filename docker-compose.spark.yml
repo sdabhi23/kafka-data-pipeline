@@ -1,0 +1,33 @@
+version: "3.7"
+name: spark-cluster
+
+services:
+
+  spark-master:
+    build:
+      context: docker/spark
+      tags:
+        - pyspark:v3.4.0
+    ports:
+      - 8082:8082
+      - 8083:8083
+    env_file: spark.env
+    volumes:
+      - ./app:/app
+
+  spark-submit:
+    build:
+      context: docker/spark
+      tags:
+        - pyspark:v3.4.0
+    ports:
+      - 4040:4040
+    command: /opt/spark/bin/spark-submit --master spark://spark-master:7077 /app/transactions_ml_features_historical_backfill.py
+    volumes:
+      - ./app:/app
+
+
+networks:
+  default:
+    name: infra-cluster_default
+    external: true
