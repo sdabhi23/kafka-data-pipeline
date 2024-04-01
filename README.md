@@ -88,8 +88,6 @@ SELECT
 FROM transactions
 GROUP BY user_id, transaction_timestamp_millis
 HAVING count(*) > 1;
-
--- rolling count by timestamp
 ```
 
 ## Notes

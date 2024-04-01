@@ -22,7 +22,7 @@ services:
         - pyspark:v3.4.0
     ports:
       - 4040:4040
-    command: /opt/spark/bin/spark-submit --master spark://spark-master:7077 /app/transactions_ml_features_historical_backfill.py
+    command: /opt/spark/bin/spark-submit --master spark://spark-master:7077 /app/transactions_ml_features_backfill_job.py
     volumes:
       - ./app:/app
 
