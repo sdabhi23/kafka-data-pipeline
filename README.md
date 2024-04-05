@@ -4,6 +4,44 @@ This streaming data pipeline uses Kafka as the backbone and Flink for data proce
 
 This setup has been created and tested using Python 3.10 on Ubuntu 22.04 (running in WSL on a windows machine).
 
+## Definition
+
+A Kafka cluster is available to you, maintained by the cloud infrastructure team. All user transactions are being sent by our backend in real time in the `transactions` Kafka topic. The schema of the records being sent to this Kafka topic is as below:
+
+```jsonc
+{
+    "user_id": int, // The id of the user making the transaction
+    "transaction_timestamp_millis": long // The timestamp, in milliseconds since epoch, of the transaction,
+    "amount": float // The amount of the transaction. Negative is a debit, positive is a credit.,
+    "currency": string // a 3 letters symbol indicating the currency of the transaction
+    "counterpart_id": int // The id of the counterpart of this transaction
+}
+```
+
+1. Create the transactions topic in your local Kafka cluster, with a 1 day retention period. Choose and justify your partitioning strategy. Make use of a schema registry to handle schema validation and evolution. Create 2 users that will be used later by consumers:
+    1. `transactions-backup-job-user`
+    2. `transactions-ml-features-job-user`
+  
+2. Create a service called `transactions-producer` pushing fake data in your Kafka topic. Minimal working code is expected here, no need for unit tests or clean code. The purpose of this service is only to generate fake data to your Kafka topic in order to showcase the behavior of the consumers you will build later.
+
+3. Create a consumer named `transactions-job-backup` of the transactions topic that will persist all records flowing through the topic to scalable file based storage. The output schema should be the same as input schema. The chosen format should enable scalable SQL queries via SparkSQL.
+
+4. Create a consumer named transactions-ml-features-job of the transactions topic that will:
+    1. compute the total number of transactions per user. The schema of generated events will be as follow:
+       ```jsonc
+       {
+            "user_id": int, # The id of the user making the transaction
+            "total_transactions_count": int # The total count of transactions for this user
+       }
+       ```
+   2. output the results of the computation to file based storage. The chosen format should enable scalable SQL queries via SparkSQL. NB: these data will be used by:
+       1. analytics team to build scheduled reports
+       2. data science team to train their ML models with historical data
+   3. output the results of the computation to a low latency key-value store of your choice. This will be used by the ML model in real time to make predictions on incoming data.
+
+5. Discuss how would you backfill your transactions-ml-features to use all historical available. Eventually, modify the code of your transaction-ml-features service to support this use case. When running an historical backfill, data should be sinked only to the file based storage, not to the low latency key-value store. 
+
+
 ## Choices & Caveats
 
 * Right now, the backfill job is a Spark batch job which is not idempotent. This could have been a streaming job, where in a service reads events from transactions backups and emits them to the `ml-features-historical` topic in Kafka.
